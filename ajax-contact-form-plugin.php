@@ -86,7 +86,11 @@
 		wp_enqueue_script('acfpjs', plugin_dir_url(__FILE__) . 'acfp.ajax.js', array('jquery'), '1.0.0', true);
 	}
 
-	
+	// Shortcode
+	add_shortcode('acfp', 'acfp_form_creation');
+	function acfp_form_creation(){
+		include plugin_dir_path(__FILE__) . 'form_template.php';		
+	}
 
 	// Ajax call	
     add_action( 'wp_ajax_acfp_contact_form', 'acfp_contact_form_ajax_callback_function' );    // If called from admin panel
@@ -133,16 +137,19 @@
 			if (mail($recipient, $subject, $email_content, $headers)) {
 				// Set a 200 (okay) response code.
 				http_response_code(200);
-				echo "Thank You! Your message has been sent. ";
+				echo "Thank You! Your message has been sent.";
+				exit;
 			} else {
 				// Set a 500 (internal server error) response code.
 				http_response_code(500);
-				echo "Oops! Something went wrong and we couldn't send your message. ";
+				echo "Oops! Something went wrong and we couldn't send your message.";
+				exit;
 			}
 
 		} else {
 			// Not a POST request, set a 403 (forbidden) response code.
 			http_response_code(403);
-			echo "There was a problem with your submission, please try again. ";
+			echo "There was a problem with your submission, please try again.";
+				exit;
 		}
     }
